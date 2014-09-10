@@ -18,27 +18,6 @@
 (function ($) {
     "use strict";
     /*
-    // $.fn === $.prototype
-    $.fn.extend({
-        getX: function getX() {
-            var x = 0, element = this.get(0);
-            do {
-                x += element.offsetLeft || 0;
-                element = element.offsetParent;
-            } while (element);
-            return x;
-        },
-        getY: function getY() {
-            var y = 0, element = this.get(0);
-            do {
-                y += element.offsetTop || 0;
-                element = element.offsetParent;
-            } while (element);
-            return y;
-        }
-    });
-    */
-    /*
         Refer to: http://stackoverflow.com/questions/1002934/jquery-x-y-document-coordinates-of-dom-object#answer-2130390
     */
     function manualGetX(original) {
