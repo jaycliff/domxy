@@ -20,6 +20,7 @@
     /*
         Refer to: http://stackoverflow.com/questions/1002934/jquery-x-y-document-coordinates-of-dom-object#answer-2130390
     */
+    var extend_options;
     function manualGetX(original) {
         var o = original,
             el = original,
@@ -100,8 +101,7 @@
     function getWindow(elem) {
         return jQuery.isWindow(elem) ? elem : elem.nodeType === 9 && elem.defaultView;
     }
-    // $.fn === $.prototype
-    $.fn.extend({
+    extend_options = {
         getX: function getX(gc_friendly) {
             var win,
                 elem = this[0],
@@ -150,5 +150,7 @@
             win = getWindow(doc);
             return (top + win.pageYOffset - doc_elem.clientTop);
         }
-    });
+    };
+    // $.fn === $.prototype
+    $.fn.extend(extend_options);
 }(jQuery));
