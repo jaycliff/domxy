@@ -1,4 +1,11 @@
 domxy
 =====
 
-Get the individual coordinates of a DOM element via $object.getX() and $object.getY()
+Get the individual coordinates (X or Y) of a DOM element.
+
+### Usage
+
+```javascript
+$('body').getX();
+$('p').getY();
+```
