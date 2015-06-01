@@ -21,136 +21,60 @@
         Refer to: http://stackoverflow.com/questions/1002934/jquery-x-y-document-coordinates-of-dom-object#answer-2130390
     */
     var extend_options;
-    function manualGetX(original) {
-        var o = original,
-            el = original,
-            left = 0,
-            considerScroll = true,
-            offsetParent = o.offsetParent;
-        while (el.parentNode) {
-            el = el.parentNode;
-            if (el.offsetParent) {
-                considerScroll = true;
-                if (window.opera) {
-                    if (el === original.parentNode || el.nodeName === 'TR') {
-                        considerScroll = false;
-                    }
-                }
-                if (considerScroll) {
-                    if (el.scrollLeft && el.scrollLeft > 0) {
-                        left -= el.scrollLeft;
-                    }
-                }
-            }
-            if (el === offsetParent) {
-                left += o.offsetLeft;
-                if (el.clientLeft && el.nodeName !== 'TABLE') {
-                    left += el.clientLeft;
-                }
-                o = el;
-                if (o.offsetParent) {
-                    if (o.offsetLeft) {
-                        left += o.offsetLeft;
-                    }
-                }
-                offsetParent = o.offsetParent;
-            }
+    function getDOMX(elem) {
+        var doc,
+            body,
+            doc_elem,
+            win,
+            scroll_left,
+            client_left;
+        if (!elem) {
+            return 0;
         }
-        //console.log('manual: ' + left);
-        return left;
+        doc = elem.ownerDocument;
+        body = doc.body;
+        doc_elem = doc.documentElement;
+        win = doc.defaultView || doc.parentWindow;
+        scroll_left = win.pageXOffset || doc_elem.scrollLeft || body.scrollLeft;
+        client_left = doc_elem.clientLeft || body.clientLeft || 0;
+        // Support: BlackBerry 5, iOS 3 (original iPhone)
+        // If we don't have gBCR, just use 0 rather than throw an error
+        return (((typeof elem.getBoundingClientRect === "function") ? elem.getBoundingClientRect().left : 0) + scroll_left) - client_left;
     }
-    function manualGetY(original) {
-        var o = original,
-            el = original,
-            top = 0,
-            considerScroll = true,
-            offsetParent = o.offsetParent;
-        while (el.parentNode) {
-            el = el.parentNode;
-            if (el.offsetParent) {
-                considerScroll = true;
-                if (window.opera) {
-                    if (el === original.parentNode || el.nodeName === 'TR') {
-                        considerScroll = false;
-                    }
-                }
-                if (considerScroll) {
-                    if (el.scrollTop && el.scrollTop > 0) {
-                        top -= el.scrollTop;
-                    }
-                }
-            }
-            if (el === offsetParent) {
-                top += o.offsetTop;
-                if (el.clientTop && el.nodeName !== 'TABLE') {
-                    top += el.clientTop;
-                }
-                o = el;
-                if (o.offsetParent) {
-                    if (o.offsetTop) {
-                        top += o.offsetTop;
-                    }
-                }
-                offsetParent = o.offsetParent;
-            }
+    function getDOMY(elem) {
+        var doc,
+            body,
+            doc_elem,
+            win,
+            scroll_top,
+            client_top;
+        if (!elem) {
+            return 0;
         }
-        //console.log('manual: ' + top);
-        return top;
-    }
-    /* Gets a window from an element */
-    function getWindow(elem) {
-        return jQuery.isWindow(elem) ? elem : elem.nodeType === 9 && elem.defaultView;
+        doc = elem.ownerDocument;
+        body = doc.body;
+        doc_elem = doc.documentElement;
+        win = doc.defaultView || doc.parentWindow;
+        scroll_top = win.pageYOffset || doc_elem.scrollTop || body.scrollTop;
+        client_top = doc_elem.clientTop || body.clientTop || 0;
+        // Support: BlackBerry 5, iOS 3 (original iPhone)
+        // If we don't have gBCR, just use 0 rather than throw an error
+        return (((typeof elem.getBoundingClientRect === "function") ? elem.getBoundingClientRect().top : 0) + scroll_top) - client_top;
     }
     extend_options = {
-        getX: function getX(gc_friendly) {
-            var win,
-                elem = this[0],
-                left = 0,
-                doc = elem && elem.ownerDocument,
-                doc_elem = doc.documentElement;
-            if (!doc) {
-                return null;
+        getX: function getX() {
+            if (this.length > 0) {
+                return getDOMX(this[0]);
             }
-            // Make sure it's not a disconnected DOM node
-            if (!jQuery.contains(doc_elem, elem)) {
-                return 0;
-            }
-            // Support: BlackBerry 5, iOS 3 (original iPhone)
-            // If we don't have gBCR, just use 0, 0 rather than error
-            if (elem.getBoundingClientRect && !gc_friendly) {
-                // ALERT: Garbage object is created everytime this line is executed
-                left = elem.getBoundingClientRect().left;
-            } else {
-                left = manualGetX(elem);
-            }
-            win = getWindow(doc);
-            return (left + win.pageXOffset - doc_elem.clientLeft);
+            return 0;
         },
-        getY: function getY(gc_friendly) {
-            var win,
-                elem = this[0],
-                top = 0,
-                doc = elem && elem.ownerDocument,
-                doc_elem = doc.documentElement;
-            if (!doc) {
-                return null;
+        getY: function getY() {
+            if (this.length > 0) {
+                return getDOMY(this[0]);
             }
-            // Make sure it's not a disconnected DOM node
-            if (!jQuery.contains(doc_elem, elem)) {
-                return 0;
-            }
-            // Support: BlackBerry 5, iOS 3 (original iPhone)
-            // If we don't have gBCR, just use 0, 0 rather than error
-            if (elem.getBoundingClientRect && !gc_friendly) {
-                // ALERT: Garbage object is created everytime this line is executed
-                top = elem.getBoundingClientRect().top;
-            } else {
-                top = manualGetY(elem);
-            }
-            win = getWindow(doc);
-            return (top + win.pageYOffset - doc_elem.clientTop);
+            return 0;
         }
     };
     // $.fn === $.prototype
     $.fn.extend(extend_options);
-}(jQuery));
+}(window.jQuery || (window.module && window.module.exports)));
