@@ -25,7 +25,7 @@
             win,
             scroll_left,
             client_left;
-        if (!elem) {
+        if (!elem || !elem.ownerDocument) {
             return 0;
         }
         doc = elem.ownerDocument;
@@ -45,7 +45,7 @@
             win,
             scroll_top,
             client_top;
-        if (!elem) {
+        if (!elem || !elem.ownerDocument) {
             return 0;
         }
         doc = elem.ownerDocument;
