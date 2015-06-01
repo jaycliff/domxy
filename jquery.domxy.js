@@ -1,5 +1,5 @@
 /*
-    Copyright 2014 Jaycliff Arcilla of Eversun Software Philippines Corporation (Davao Branch)
+    Copyright 2015 Jaycliff Arcilla of Eversun Software Philippines Corporation (Davao Branch)
     
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -17,9 +17,6 @@
 /*global jQuery*/
 (function ($) {
     "use strict";
-    /*
-        Refer to: http://stackoverflow.com/questions/1002934/jquery-x-y-document-coordinates-of-dom-object#answer-2130390
-    */
     var extend_options;
     function getDOMX(elem) {
         var doc,
@@ -77,4 +74,6 @@
     };
     // $.fn === $.prototype
     $.fn.extend(extend_options);
+    window.getDOMX = getDOMX;
+    window.getDOMY = getDOMY;
 }(window.jQuery || (window.module && window.module.exports)));
