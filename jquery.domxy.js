@@ -15,7 +15,7 @@
 */
 /*jslint browser: true, devel: true */
 /*global jQuery*/
-(function ($) {
+(function (window, $) {
     "use strict";
     var extend_options;
     function getDOMX(elem) {
@@ -74,6 +74,8 @@
     };
     // $.fn === $.prototype
     $.fn.extend(extend_options);
+    $.getDOMX = getDOMX;
+    $.getDOMY = getDOMY;
     window.getDOMX = getDOMX;
     window.getDOMY = getDOMY;
-}(window.jQuery || (window.module && window.module.exports)));
+}(window, window.jQuery || (window.module && window.module.exports)));
